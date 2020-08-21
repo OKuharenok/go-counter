@@ -29,7 +29,7 @@ func main() {
 	go func() {
 		for res := range result {
 			if res.Error != nil {
-				fmt.Printf("Error result for %s: %d\n", res.Path, res.Error)
+				fmt.Printf("Error result for %s: %s\n", res.Path, res.Error)
 				continue
 			}
 			total += res.Count
