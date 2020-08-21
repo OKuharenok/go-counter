@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 
-	"github.com/OKuharenok/go-counter/types"
+	"go-counter/types"
 )
 
 type reader struct {

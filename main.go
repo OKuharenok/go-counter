@@ -9,9 +9,9 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/OKuharenok/go-counter/readers/filereader"
-	"github.com/OKuharenok/go-counter/readers/urlreader"
-	"github.com/OKuharenok/go-counter/types"
+	"go-counter/readers/filereader"
+	"go-counter/readers/urlreader"
+	"go-counter/types"
 )
 
 func main() {
@@ -78,7 +78,7 @@ func handle(path string, inProcess chan struct{}, result chan types.Result, wg *
 			Error: err,
 		}
 		return
-	}	
+	}
 
 	result <- types.Result{
 		Path:  path,

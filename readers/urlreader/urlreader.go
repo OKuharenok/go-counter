@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/OKuharenok/go-counter/types"
+	"go-counter/types"
 )
 
 type reader struct {
