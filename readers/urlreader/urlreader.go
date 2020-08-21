@@ -4,21 +4,20 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-
-	"go-counter/types"
 )
 
-type reader struct {
+// Reader stores URL of the data source
+type Reader struct {
 	Path string
 }
 
 // NewReader creates reader for URL source
-func NewReader(path string) types.Reader {
-	return &reader{Path: path}
+func NewReader(path string) *Reader {
+	return &Reader{Path: path}
 }
 
 // Read is method for reading data from URL
-func (ur *reader) Read() ([]byte, error) {
+func (ur *Reader) Read() ([]byte, error) {
 	resp, err := http.Get(ur.Path)
 	if resp != nil {
 		defer resp.Body.Close()

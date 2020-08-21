@@ -9,9 +9,9 @@ import (
 	"strings"
 	"sync"
 
-	"go-counter/readers/filereader"
-	"go-counter/readers/urlreader"
-	"go-counter/types"
+	"github.com/OKuharenok/go-counter/readers/filereader"
+	"github.com/OKuharenok/go-counter/readers/urlreader"
+	"github.com/OKuharenok/go-counter/types"
 )
 
 func main() {
@@ -19,9 +19,14 @@ func main() {
 	flag.IntVar(&k, "k", 5, "Max goroutines")
 	flag.Parse()
 
+	if k < 1 {
+		fmt.Printf("Invalid k: %d\n", k)
+		os.Exit(1)
+	}
+
 	inProcess := make(chan struct{}, k)
 	done := make(chan struct{})
-	result := make(chan types.Result)
+	result := make(chan types.Result, k)
 	total := 0
 	wg := &sync.WaitGroup{}
 	input := bufio.NewScanner(os.Stdin)
@@ -39,9 +44,9 @@ func main() {
 	}()
 
 	for input.Scan() {
-		wg.Add(1)
 		path := input.Text()
 		inProcess <- struct{}{}
+		wg.Add(1)
 		go handle(path, inProcess, result, wg)
 	}
 
@@ -59,13 +64,16 @@ func handle(path string, inProcess chan struct{}, result chan types.Result, wg *
 
 	var reader types.Reader
 
-	if u, err := url.Parse(path); err != nil {
+	u, err := url.Parse(path)
+	if err != nil {
 		result <- types.Result{
 			Path:  path,
 			Error: err,
 		}
 		return
-	} else if u.Scheme == "" {
+	}
+
+	if u.Scheme == "" {
 		reader = filereader.NewReader(path)
 	} else {
 		reader = urlreader.NewReader(path)
